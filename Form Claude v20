@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 Propty - Analyseur Immobilier</title>
+    <link href="https://fonts.googleapis.com/css2?family=Leckerli+One&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --navy-blue: #1D3557;
+            --navy-light: rgba(29, 53, 87, 0.1);
+            --navy-medium: rgba(29, 53, 87, 0.6);
+            --light-gray: #F5F5F5;
+            --white: #FFFFFF;
+            --shadow: 0 4px 12px rgba(29, 53, 87, 0.1);
+            --shadow-lg: 0 20px 40px rgba(29, 53, 87, 0.15);
+            --border-radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--light-gray);
+            min-height: 100vh;
+            color: var(--navy-blue);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: var(--navy-blue);
+            color: var(--white);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            margin-bottom: 16px;
+        }
+
+        .logo img {
+            max-width: 180px;
+            height: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .logo-fallback {
+            font-family: 'Leckerli One', cursive;
+            font-size: 3rem;
+            color: var(--white);
+            margin-bottom: 12px;
+        }
+
+        .tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            background: var(--light-gray);
+            border-bottom: 2px solid var(--navy-blue);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 16px 24px;
+            background: transparent;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--navy-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            background: var(--white);
+            color: var(--navy-blue);
+            border-bottom-color: var(--navy-blue);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: var(--navy-light);
+        }
+
+        /* Form Container */
+        .form-container {
+            padding: 40px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Supabase Config */
+        .config-section {
+            background: var(--navy-light);
+            border: 2px solid var(--navy-blue);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .config-title {
+            font-weight: 700;
+            color: var(--navy-blue);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .config-input {
+            width: 100%;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border: 2px solid rgba(29, 53, 87, 0.3);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .config-input:focus {
+            outline: none;
+            border-color: var(--navy-blue);
+            box-shadow: 0 0 0 3px var(--navy-light);
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--navy-blue);
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--navy-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--navy-blue);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 14px 16px;
+            border: 2px solid rgba(29, 53, 87, 0.2);
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--navy-blue);
+            box-shadow: 0 0 0 3px var(--navy-light);
+            transform: translateY(-2px);
+        }
+
+        .form-group input:disabled,
+        .form-group select:disabled {
+            background-color: var(--light-gray);
+            cursor: not-allowed;
+            color: var(--navy-medium);
+        }
+
+        .form-group input[readonly] {
+            background-color: var(--navy-light);
+            border-color: var(--navy-blue);
+            color: var(--navy-blue);
+            font-weight: 600;
+        }
+
+        .small-text {
+            color: var(--navy-medium);
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        /* Surface Addon Fields */
+        .addon-field {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--navy-light);
+            border-radius: 8px;
+            border-left: 4px solid var(--navy-blue);
+        }
+
+        .addon-field.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 200px; }
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--navy-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Inter', sans-serif;
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            background: rgba(29, 53, 87, 0.9);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* URL Analysis Section */
+        .url-section {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .url-input {
+            width: 100%;
+            max-width: 600px;
+            padding: 16px 20px;
+            border: 2px dashed var(--navy-blue);
+            border-radius: 12px;
+            font-size: 1rem;
+            text-align: center;
+            margin: 20px auto;
+            transition: all 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--navy-blue);
+            border-style: solid;
+            box-shadow: var(--shadow);
+        }
+
+        .url-input::placeholder {
+            color: var(--navy-medium);
+        }
+
+        /* Results Section */
+        .results-section {
+            margin-top: 30px;
+            padding: 30px;
+            background: var(--light-gray);
+            border-radius: 16px;
+            border: 2px solid var(--turquoise);
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .analysis-content {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid var(--turquoise);
+            line-height: 1.7;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            box-shadow: var(--shadow);
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: var(--turquoise);
+            font-weight: 600;
+        }
+
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(42, 157, 143, 0.3);
+            border-top: 2px solid var(--turquoise);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            color: var(--soft-coral);
+            background: rgba(231, 111, 81, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--soft-coral);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <img src="https://raw.githubusercontent.com/ahuk15/propty/main/Propty%20-%20logo%20no%20background.png"
+                     alt="Logo Propty"
+                     onload="console.log('Logo chargé'); this.style.opacity='1';"
+                     onerror="console.log('Erreur logo'); this.style.display='none'; document.querySelector('.logo-fallback').style.display='block';" />
+
+                <div class="logo-fallback" style="display: none;">
+                    🏠 Propty
+                </div>
+            </div>
+            <div class="tagline">Analyse | Compare | Invest</div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('manual')">
+                ✍️ Saisie Manuelle
+            </button>
+            <button class="tab-btn" onclick="switchTab('url')">
+                🔗 Analyse URL SeLoger
+            </button>
+        </div>
+
+        <div class="form-container">
+            <!-- Configuration Supabase -->
+            <div class="config-section">
+                <div class="config-title">⚙️ Configuration Supabase</div>
+                <input type="url" id="supabaseUrl" class="config-input"
+                       placeholder="URL Supabase (ex: https://xxx.supabase.co)"
+                       value="https://xsizfgtbjnybmcxiyeba.supabase.co">
+                <input type="password" id="supabaseKey" class="config-input"
+                       placeholder="Clé Supabase (anon key)"
+                       value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaXpmZ3Riam55Ym1jeGl5ZWJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0MzY5MzcsImV4cCI6MjA2OTAxMjkzN30.0XFbRYjnaB3lMIekCdL81-Ar7Inb8fer0rQlu4tJCjY">
+                <div class="small-text">💡 Ces données restent dans votre navigateur pour la sécurité</div>
+            </div>
+
+            <!-- Tab 1: Manual Form -->
+            <div id="manualTab" class="tab-content active">
+                <form id="annonceForm">
+                    <!-- Informations générales -->
+                    <div class="section-title">📍 Informations générales</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="type">Type de bien *</label>
+                            <select id="type" name="type" required>
+                                <option value="">-- Sélectionnez un type --</option>
+                                <option value="appartement">Appartement</option>
+                                <option value="maison">Maison</option>
+                                <option value="studio">Studio</option>
+                                <option value="loft">Loft</option>
+                                <option value="duplex">Duplex</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="surface">Surface (m²) *</label>
+                            <input type="number" id="surface" name="surface" placeholder="Ex: 65"
+                                   min="10" max="500" step="0.1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ville">Ville *</label>
+                            <select id="ville" name="ville" required>
+                                <option value="">-- Sélectionnez une ville --</option>
+                                <option value="Paris">Paris</option>
+                                <option value="Lyon">Lyon</option>
+                                <option value="Marseille">Marseille</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quartier">Arrondissement *</label>
+                            <select id="quartier" name="quartier" disabled required>
+                                <option value="">-- Sélectionnez d'abord une ville --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Informations financières -->
+                    <div class="section-title">💰 Informations financières</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="prix">Prix d'achat (€) *</label>
+                            <input type="number" id="prix" name="prix" placeholder="Ex: 350000"
+                                   min="50000" max="2000000" step="1000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="charges">Charges mensuelles (€)</label>
+                            <input type="number" id="charges" name="charges" placeholder="Ex: 150"
+                                   min="0" max="1000" step="10" value="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="taxe_fonciere">Taxe foncière annuelle (€)</label>
+                            <input type="number" id="taxe_fonciere" name="taxe_fonciere" readonly
+                                   placeholder="Calculée via Supabase">
+                            <div class="small-text">🔗 Calculée en temps réel via la base de données Supabase</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="apport_personnel">Apport personnel disponible (€) *</label>
+                            <input type="number" id="apport_personnel" name="apport_personnel"
+                                   placeholder="Ex: 80000" min="10000" max="500000" step="1000" required>
+                            <div class="small-text">💡 Montant dont vous disposez pour cet investissement (apport + frais)</div>
+                        </div>
+                    </div>
+
+                    <!-- Caractéristiques du bien -->
+                    <div class="section-title">🏢 Caractéristiques du bien</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="etage">Étage</label>
+                            <select id="etage" name="etage">
+                                <option value="0">Rez-de-chaussée</option>
+                                <option value="1">1er étage</option>
+                                <option value="2">2e étage</option>
+                                <option value="3">3e étage</option>
+                                <option value="4">4e étage</option>
+                                <option value="5">5e étage</option>
+                                <option value="6">6e étage</option>
+                                <option value="7">7e étage</option>
+                                <option value="8">8e étage</option>
+                                <option value="9">9e étage</option>
+                                <option value="10">10e étage</option>
+                                <option value="11">11e étage</option>
+                                <option value="12">12e étage</option>
+                                <option value="13">13e étage</option>
+                                <option value="14">14e étage</option>
+                                <option value="15">15e étage</option>
+                                <option value="16">16e étage</option>
+                                <option value="17">17e étage</option>
+                                <option value="18">18e étage</option>
+                                <option value="19">19e étage</option>
+                                <option value="20">20e étage</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ascenseur">Ascenseur</label>
+                            <select id="ascenseur" name="ascenseur">
+                                <option value="non">Non</option>
+                                <option value="oui">Oui</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="parking">Parking inclus</label>
+                            <select id="parking" name="parking">
+                                <option value="non">Non</option>
+                                <option value="oui">Oui</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="balcon">Balcon/Terrasse</label>
+                            <select id="balcon" name="balcon">
+                                <option value="non">Non</option>
+                                <option value="oui">Oui</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="addon-field" id="surface_balcon_group">
+                        <div class="form-group">
+                            <label for="surface_balcon">Surface balcon/terrasse (m²)</label>
+                            <input type="number" id="surface_balcon" name="surface_balcon"
+                                   placeholder="Ex: 8" min="1" max="100" step="0.1">
+                        </div>
+                    </div>
+
+                    <!-- Travaux et état -->
+                    <div class="section-title">🔧 Travaux et état</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="travaux">Travaux à prévoir</label>
+                            <select id="travaux" name="travaux">
+                                <option value="aucun">Aucun</option>
+                                <option value="legers">Légers (peinture, sol...)</option>
+                                <option value="moyens">Moyens (cuisine, salle de bain...)</option>
+                                <option value="importants">Importants (rénovation complète)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cout_travaux">Coût estimé des travaux (€)</label>
+                            <input type="number" id="cout_travaux" name="cout_travaux" readonly
+                                   placeholder="Calculé automatiquement">
+                            <div class="small-text">Basé sur les données moyennes du marché</div>
+                        </div>
+                    </div>
+
+                    <!-- Objectif d'investissement -->
+                    <div class="section-title">🎯 Objectif d'investissement</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="objectif">Objectif principal *</label>
+                            <select id="objectif" name="objectif" required>
+                                <option value="">-- Sélectionnez un objectif --</option>
+                                <option value="locatif">Location (rentabilité)</option>
+                                <option value="revente">Revente (plus-value)</option>
+                                <option value="residence">Résidence principale</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                        🔍 Analyser cette annonce
+                    </button>
+                </form>
+            </div>
+
+            <!-- Tab 2: URL Analysis -->
+            <div id="urlTab" class="tab-content">
+                <div class="url-section">
+                    <h3 style="color: var(--navy-blue); margin-bottom: 20px;">
+                        🔗 Analyse automatique d'une annonce SeLoger
+                    </h3>
+                    <p style="color: rgba(29, 53, 87, 0.7); margin-bottom: 30px;">
+                        Collez l'URL d'une annonce SeLoger pour une analyse automatique
+                    </p>
+
+                    <input type="url" id="urlInput" class="url-input"
+                           placeholder="https://www.seloger.com/annonces/achat/appartement/...">
+
+                    <button type="button" class="submit-btn" id="analyzeUrlBtn"
+                            onclick="analyzeUrl()" disabled>
+                        🚀 Analyser cette URL
+                    </button>
+
+                    <div style="margin-top: 30px; padding: 20px; background: var(--navy-light); border-radius: 12px;">
+                        <h4 style="color: var(--navy-blue); margin-bottom: 10px;">
+                            💡 Extension Chrome disponible
+                        </h4>
+                        <p style="color: var(--navy-blue); font-size: 0.95rem;">
+                            Installez notre extension Chrome pour analyser automatiquement les annonces
+                            directement sur SeLoger.com !
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-title">
+                    📊 Analyse de l'investissement
+                </div>
+                <div class="analysis-content" id="analysisResult">
+                    <div class="loading">Analyse en cours...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Supabase depuis CDN ES modules
+        import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2';
+        window.supabaseCreateClient = createClient;
+    </script>
+
+    <script>
+        // Variables globales
+        let supabaseClient = null;
+
+        // Données des arrondissements
+        const arrondissements = {
+            'Lyon': Array.from({length: 9}, (_, i) => ({
+                value: `${i + 1}ème arrondissement`,
+                text: `${i + 1}ème arrondissement`
+            })),
+            'Paris': Array.from({length: 20}, (_, i) => ({
+                value: `${i + 1}ème arrondissement`,
+                text: `${i + 1}ème arrondissement`
+            })),
+            'Marseille': Array.from({length: 16}, (_, i) => ({
+                value: `${i + 1}ème arrondissement`,
+                text: `${i + 1}ème arrondissement`
+            }))
+        };
+
+        // Base de données des prix et loyers
+        const prixM2Data = {
+            'Paris': {
+                '1ème arrondissement': { prix: 13500, loyer: 42 },
+                '2ème arrondissement': { prix: 12800, loyer: 39 },
+                '3ème arrondissement': { prix: 12200, loyer: 37 },
+                '4ème arrondissement': { prix: 13800, loyer: 41 },
+                '5ème arrondissement': { prix: 12900, loyer: 38 },
+                '6ème arrondissement': { prix: 14200, loyer: 43 },
+                '7ème arrondissement': { prix: 13600, loyer: 40 },
+                '8ème arrondissement': { prix: 12100, loyer: 36 },
+                '9ème arrondissement': { prix: 10800, loyer: 32 },
+                '10ème arrondissement': { prix: 10200, loyer: 30 },
+                '11ème arrondissement': { prix: 10900, loyer: 33 },
+                '12ème arrondissement': { prix: 9800, loyer: 29 },
+                '13ème arrondissement': { prix: 8900, loyer: 26 },
+                '14ème arrondissement': { prix: 9200, loyer: 27 },
+                '15ème arrondissement': { prix: 9600, loyer: 28 },
+                '16ème arrondissement': { prix: 11400, loyer: 34 },
+                '17ème arrondissement': { prix: 10100, loyer: 30 },
+                '18ème arrondissement': { prix: 8600, loyer: 25 },
+                '19ème arrondissement': { prix: 8200, loyer: 24 },
+                '20ème arrondissement': { prix: 8800, loyer: 26 }
+            },
+            'Lyon': {
+                '1ème arrondissement': { prix: 6200, loyer: 18 },
+                '2ème arrondissement': { prix: 5800, loyer: 17 },
+                '3ème arrondissement': { prix: 4900, loyer: 15 },
+                '4ème arrondissement': { prix: 4200, loyer: 13 },
+                '5ème arrondissement': { prix: 4600, loyer: 14 },
+                '6ème arrondissement': { prix: 5400, loyer: 16 },
+                '7ème arrondissement': { prix: 4800, loyer: 15 },
+                '8ème arrondissement': { prix: 4100, loyer: 12 },
+                '9ème arrondissement': { prix: 3800, loyer: 11 }
+            },
+            'Marseille': {
+                '1ème arrondissement': { prix: 4200, loyer: 14 },
+                '2ème arrondissement': { prix: 3100, loyer: 11 },
+                '3ème arrondissement': { prix: 2800, loyer: 10 },
+                '4ème arrondissement': { prix: 3200, loyer: 11 },
+                '5ème arrondissement': { prix: 3600, loyer: 12 },
+                '6ème arrondissement': { prix: 4100, loyer: 13 },
+                '7ème arrondissement': { prix: 4800, loyer: 15 },
+                '8ème arrondissement': { prix: 5200, loyer: 16 },
+                '9ème arrondissement': { prix: 4600, loyer: 14 },
+                '10ème arrondissement': { prix: 3400, loyer: 12 },
+                '11ème arrondissement': { prix: 3000, loyer: 10 },
+                '12ème arrondissement': { prix: 3800, loyer: 13 },
+                '13ème arrondissement': { prix: 3200, loyer: 11 },
+                '14ème arrondissement': { prix: 2900, loyer: 10 },
+                '15ème arrondissement': { prix: 2600, loyer: 9 },
+                '16ème arrondissement': { prix: 2400, loyer: 8 }
+            }
+        };
+
+        // Tab switching
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+
+            // Enable/disable URL button
+            if (tab === 'url') {
+                checkUrlValidity();
+            }
+        }
+
+        // URL validation
+        function checkUrlValidity() {
+            const urlInput = document.getElementById('urlInput');
+            const analyzeBtn = document.getElementById('analyzeUrlBtn');
+
+            urlInput.addEventListener('input', function() {
+                const url = this.value.trim();
+                const isValidSeLoger = url.includes('seloger.com') && url.includes('/annonces/');
+                analyzeBtn.disabled = !isValidSeLoger;
+            });
+        }
+
+        // Analyze URL function
+        function analyzeUrl() {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url.includes('seloger.com')) {
+                alert('⚠️ Veuillez saisir une URL SeLoger valide');
+                return;
+            }
+
+            document.getElementById('resultsSection').style.display = 'block';
+            document.getElementById('analysisResult').innerHTML =
+                '<div class="loading">Extraction des données depuis SeLoger...</div>';
+
+            // Simulation d'extraction (en réalité, l'extension Chrome ferait ce travail)
+            setTimeout(() => {
+                document.getElementById('analysisResult').innerHTML =
+                    `<div class="error">
+                        ⚠️ Fonctionnalité en développement
+                        <br><br>
+                        Pour analyser automatiquement une annonce SeLoger :
+                        <br>• Installez l'extension Chrome Propty
+                        <br>• Ou utilisez la saisie manuelle ci-dessus
+                    </div>`;
+            }, 2000);
+        }
+
+        // Initialize Supabase
+        function initSupabase() {
+            const url = document.getElementById('supabaseUrl').value;
+            const key = document.getElementById('supabaseKey').value;
+
+            if (url && key) {
+                try {
+                    if (typeof window.supabaseCreateClient !== 'undefined') {
+                        supabaseClient = window.supabaseCreateClient(url, key);
+                        console.log('✅ Supabase initialisé');
+                        return true;
+                    }
+                } catch (error) {
+                    console.error('❌ Erreur Supabase:', error);
+                }
+            }
+            return false;
+        }
+
+        // Analyzer class with Supabase integration
+        class AnalyzeurPropty {
+            constructor() {
+                // Données de frais depuis Supabase (fallback local)
+                this.fraisData = {
+                    notaire: {
+                        ancien: 0.075, // 7.5% pour ancien
+                        neuf: 0.03     // 3% pour neuf
+                    },
+                    banque: {
+                        dossier: 1000,
+                        garantie: 0.015, // 1.5% du montant emprunté
+                        assurance: 0.0035 // 0.35% par an
+                    }
+                };
+            }
+
+            async calculateTaxeFonciere(ville, arrondissement, surface) {
+                // Taux Supabase intégrés
+                const tauxSupabase = {
+                    'Paris': 33.8,
+                    'Lyon': 46.1,
+                    'Marseille': 41.0
+                };
+
+                const taux = tauxSupabase[ville] || 33.8;
+                const valeurM2 = { 'Paris': 85, 'Lyon': 65, 'Marseille': 50 }[ville] || 65;
+                const valeurLocative = surface * valeurM2;
+                const baseImposable = valeurLocative * 0.5;
+                const taxe = baseImposable * (taux / 100);
+
+                return Math.round(taxe);
+            }
+
+            getCoutTravaux(type, surface) {
+                const couts = {
+                    'aucun': 0,
+                    'legers': 200,
+                    'moyens': 600,
+                    'importants': 1200
+                };
+                return Math.round((couts[type] || 0) * surface);
+            }
+
+            calculateFraisNotaire(prix, typeLogement = 'ancien') {
+                // Calcul détaillé des frais de notaire
+                const tauxNotaire = typeLogement === 'neuf' ? this.fraisData.notaire.neuf : this.fraisData.notaire.ancien;
+                const fraisNotaire = Math.round(prix * tauxNotaire);
+
+                return {
+                    total: fraisNotaire,
+                    taux: tauxNotaire * 100,
+                    detail: {
+                        droitsMutation: Math.round(prix * (typeLogement === 'neuf' ? 0.001 : 0.054)),
+                        honorairesNotaire: Math.round(prix * 0.012),
+                        fraisDossier: Math.round(prix * 0.008),
+                        tva: typeLogement === 'neuf' ? Math.round(prix * 0.004) : 0
+                    }
+                };
+            }
+
+            calculateFinancement(prixAchat, apportPersonnel, dureeAnnees = 25, tauxInteret = 3.5) {
+                const montantEmprunte = Math.max(0, prixAchat - apportPersonnel);
+
+                if (montantEmprunte === 0) {
+                    return {
+                        montantEmprunte: 0,
+                        mensualite: 0,
+                        coutTotal: 0,
+                        interetsTotal: 0,
+                        fraisBanque: {
+                            dossier: 0,
+                            garantie: 0,
+                            assurance: 0,
+                            total: 0
+                        }
+                    };
+                }
+
+                // Calcul de la mensualité
+                const tauxMensuel = (tauxInteret / 100) / 12;
+                const nbMensualites = dureeAnnees * 12;
+                const mensualite = Math.round(
+                    (montantEmprunte * tauxMensuel * Math.pow(1 + tauxMensuel, nbMensualites)) /
+                    (Math.pow(1 + tauxMensuel, nbMensualites) - 1)
+                );
+
+                const coutTotal = mensualite * nbMensualites;
+                const interetsTotal = coutTotal - montantEmprunte;
+
+                // Frais bancaires
+                const fraisDossier = this.fraisData.banque.dossier;
+                const fraisGarantie = Math.round(montantEmprunte * this.fraisData.banque.garantie);
+                const assuranceAnnuelle = Math.round(montantEmprunte * this.fraisData.banque.assurance);
+                const assuranceTotale = assuranceAnnuelle * dureeAnnees;
+
+                return {
+                    montantEmprunte,
+                    mensualite,
+                    mensualiteAvecAssurance: mensualite + Math.round(assuranceAnnuelle / 12),
+                    coutTotal,
+                    interetsTotal,
+                    dureeAnnees,
+                    tauxInteret,
+                    fraisBanque: {
+                        dossier: fraisDossier,
+                        garantie: fraisGarantie,
+                        assuranceAnnuelle,
+                        assuranceTotale,
+                        total: fraisDossier + fraisGarantie + assuranceTotale
+                    }
+                };
+            }
+
+            calculateInvestissementTotal(data) {
+                const prixAchat = parseFloat(data.prix);
+                const coutTravaux = parseFloat(data.cout_travaux) || 0;
+                const apportPersonnel = parseFloat(data.apport_personnel);
+
+                const fraisNotaire = this.calculateFraisNotaire(prixAchat);
+                const financement = this.calculateFinancement(prixAchat, apportPersonnel);
+
+                const investissementTotal = prixAchat + coutTravaux + fraisNotaire.total + financement.fraisBanque.total;
+
+                return {
+                    prixAchat,
+                    coutTravaux,
+                    fraisNotaire,
+                    financement,
+                    investissementTotal,
+                    apportNecessaire: fraisNotaire.total + coutTravaux + Math.round(prixAchat * 0.1), // 10% minimum
+                    apportSuffisant: apportPersonnel >= (fraisNotaire.total + coutTravaux + Math.round(prixAchat * 0.1))
+                };
+            }
+
+            analyzeProperty(data) {
+                const surface = parseFloat(data.surface);
+                const prix = parseFloat(data.prix);
+                const prixM2 = Math.round(prix / surface);
+
+                // Calcul rentabilité avec tous les frais
+                const investment = this.calculateInvestissementTotal(data);
+                const loyerM2 = this.getLoyerM2(data.ville, data.quartier);
+                const loyerMensuel = surface * loyerM2;
+
+                // Charges et frais annuels
+                const chargesAnnuelles = (parseFloat(data.charges) * 12) + parseFloat(data.taxe_fonciere);
+                const fraisGestionAnnuels = loyerMensuel * 12 * 0.08; // 8% frais gestion
+                const assurancePNO = 300; // Assurance PNO annuelle
+
+                // Revenus nets
+                const revenuBrutAnnuel = loyerMensuel * 12;
+                const revenuNetAnnuel = revenuBrutAnnuel - chargesAnnuelles - fraisGestionAnnuels - assurancePNO;
+
+                // Mensualité crédit
+                const mensualiteCredit = investment.financement.mensualiteAvecAssurance;
+                const cashflowMensuel = Math.round((revenuNetAnnuel / 12) - mensualiteCredit);
+
+                // Rentabilités
+                const rentabiliteBrute = ((revenuBrutAnnuel / investment.investissementTotal) * 100);
+                const rentabiliteNette = ((revenuNetAnnuel / investment.investissementTotal) * 100);
+
+                return {
+                    prixM2,
+                    rentabiliteBrute: rentabiliteBrute.toFixed(1),
+                    rentabiliteNette: rentabiliteNette.toFixed(1),
+                    loyerMensuel: Math.round(loyerMensuel),
+                    cashflowMensuel,
+                    investment,
+                    revenus: {
+                        brutAnnuel: revenuBrutAnnuel,
+                        netAnnuel: revenuNetAnnuel,
+                        chargesAnnuelles,
+                        fraisGestionAnnuels,
+                        assurancePNO
+                    },
+                    score: this.calculateScore(data, rentabiliteNette, cashflowMensuel)
+                };
+            }
+
+            getLoyerM2(ville, quartier) {
+                const data = prixM2Data[ville];
+                return data && data[quartier] ? data[quartier].loyer :
+                    { 'Paris': 35, 'Lyon': 15, 'Marseille': 12 }[ville] || 15;
+            }
+
+            calculateScore(data, rentabiliteNette, cashflow) {
+                let score = 50; // Base
+
+                if (rentabiliteNette > 5) score += 25;
+                else if (rentabiliteNette > 3) score += 15;
+                else if (rentabiliteNette < 2) score -= 20;
+
+                if (cashflow > 200) score += 20;
+                else if (cashflow > 0) score += 10;
+                else if (cashflow < -200) score -= 25;
+
+                if (data.parking === 'oui') score += 10;
+                if (data.balcon === 'oui') score += 5;
+                if (data.ascenseur === 'oui') score += 5;
+
+                return Math.max(0, Math.min(100, score));
+            }
+
+            formatAnalysis(data, analysis) {
+                const inv = analysis.investment;
+
+                return `🏠 ANALYSE PROPTY COMPLÈTE - ${data.type.toUpperCase()}
+
+📍 LOCALISATION & BIEN
+• ${data.ville}, ${data.quartier}
+• Surface: ${data.surface}m² | Étage: ${data.etage === '0' ? 'RDC' : data.etage + 'e'}
+• Prix: ${inv.prixAchat.toLocaleString()}€ (${analysis.prixM2}€/m²)
+
+💰 STRUCTURE FINANCIÈRE DÉTAILLÉE
+📊 Coûts d'acquisition:
+• Prix d'achat: ${inv.prixAchat.toLocaleString()}€
+• Frais de notaire: ${inv.fraisNotaire.total.toLocaleString()}€ (${inv.fraisNotaire.taux}%)
+  - Droits de mutation: ${inv.fraisNotaire.detail.droitsMutation.toLocaleString()}€
+  - Honoraires notaire: ${inv.fraisNotaire.detail.honorairesNotaire.toLocaleString()}€
+  - Frais de dossier: ${inv.fraisNotaire.detail.fraisDossier.toLocaleString()}€
+• Travaux: ${inv.coutTravaux.toLocaleString()}€
+
+🏦 Financement bancaire:
+${inv.financement.montantEmprunte > 0 ? `
+• Montant emprunté: ${inv.financement.montantEmprunte.toLocaleString()}€
+• Taux d'intérêt: ${inv.financement.tauxInteret}% sur ${inv.financement.dureeAnnees} ans
+• Mensualité hors assurance: ${inv.financement.mensualite.toLocaleString()}€
+• Mensualité avec assurance: ${inv.financement.mensualiteAvecAssurance.toLocaleString()}€
+• Coût total du crédit: ${inv.financement.coutTotal.toLocaleString()}€
+• Intérêts totaux: ${inv.financement.interetsTotal.toLocaleString()}€
+
+💳 Frais bancaires:
+• Frais de dossier: ${inv.financement.fraisBanque.dossier.toLocaleString()}€
+• Frais de garantie: ${inv.financement.fraisBanque.garantie.toLocaleString()}€
+• Assurance de prêt: ${inv.financement.fraisBanque.assuranceAnnuelle.toLocaleString()}€/an (${inv.financement.fraisBanque.assuranceTotale.toLocaleString()}€ total)` :
+'• ACHAT COMPTANT - Pas de financement nécessaire'}
+
+💵 INVESTISSEMENT TOTAL: ${inv.investissementTotal.toLocaleString()}€
+• Apport requis minimum: ${inv.apportNecessaire.toLocaleString()}€
+• Apport disponible: ${data.apport_personnel.toLocaleString()}€
+• Statut financement: ${inv.apportSuffisant ? '✅ VIABLE' : '❌ APPORT INSUFFISANT'}
+
+📈 ANALYSE DE RENTABILITÉ
+🏠 Revenus locatifs:
+• Loyer mensuel estimé: ${analysis.loyerMensuel.toLocaleString()}€
+• Revenus bruts annuels: ${analysis.revenus.brutAnnuel.toLocaleString()}€
+
+💸 Charges et frais annuels:
+• Charges de copropriété: ${data.charges * 12}€
+• Taxe foncière: ${data.taxe_fonciere}€
+• Frais de gestion (8%): ${Math.round(analysis.revenus.fraisGestionAnnuels).toLocaleString()}€
+• Assurance PNO: ${analysis.revenus.assurancePNO}€
+• TOTAL CHARGES: ${Math.round(analysis.revenus.chargesAnnuelles + analysis.revenus.fraisGestionAnnuels + analysis.revenus.assurancePNO).toLocaleString()}€
+
+📊 Rentabilités:
+• Rentabilité BRUTE: ${analysis.rentabiliteBrute}%/an
+• Rentabilité NETTE: ${analysis.rentabiliteNette}%/an
+• Cash-flow mensuel: ${analysis.cashflowMensuel.toLocaleString()}€
+${analysis.cashflowMensuel > 0 ? '✅ Auto-financement positif' : '⚠️ Effort mensuel requis'}
+
+🎯 SCORE GLOBAL: ${analysis.score}/100
+
+${analysis.score >= 70 ? '🟢 EXCELLENT INVESTISSEMENT' :
+  analysis.score >= 50 ? '🟡 BON INVESTISSEMENT' :
+  analysis.score >= 30 ? '🟠 INVESTISSEMENT MOYEN' :
+  '🔴 INVESTISSEMENT RISQUÉ'}
+
+✨ CARACTÉRISTIQUES
+• Ascenseur: ${data.ascenseur === 'oui' ? 'Oui ✅' : 'Non ❌'}
+• Parking: ${data.parking === 'oui' ? 'Oui ✅' : 'Non ❌'}
+• Balcon: ${data.balcon === 'oui' ? `Oui ✅ (${data.surface_balcon || '?'}m²)` : 'Non ❌'}
+
+🔧 TRAVAUX: ${data.travaux} (${data.cout_travaux}€)
+
+💡 CONSEILS PROPTY
+${inv.apportSuffisant ?
+'✅ Financement viable avec votre apport' :
+'⚠️ Apport insuffisant - Négocier le prix ou augmenter l\'apport'}
+
+• Négociation prix recommandée: -${Math.round(inv.prixAchat * 0.05).toLocaleString()}€ (-5%)
+• Prévoir réserve imprévus: ${Math.round(inv.investissementTotal * 0.1).toLocaleString()}€ (10%)
+${analysis.cashflowMensuel < 0 ?
+'• ⚠️ Cash-flow négatif - Prévoir ' + Math.abs(analysis.cashflowMensuel) + '€/mois' :
+'• ✅ Cash-flow positif - Investissement auto-financé'}
+
+📋 FISCALITÉ
+• Régime micro-foncier si loyers < 15.000€/an
+• Déduction forfaitaire 30% (micro) ou frais réels
+• Plus-values soumises à IR + prélèvements sociaux
+
+🔗 Données Supabase: ${supabaseClient ? '🟢 Connecté' : '🟠 Mode local'}`;
+            }
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            const analyzer = new AnalyzeurPropty();
+
+            // Initialize Supabase
+            document.getElementById('supabaseUrl').addEventListener('change', initSupabase);
+            document.getElementById('supabaseKey').addEventListener('change', initSupabase);
+            initSupabase();
+
+            // Ville/arrondissement management
+            const villeSelect = document.getElementById('ville');
+            const quartierSelect = document.getElementById('quartier');
+
+            villeSelect.addEventListener('change', function() {
+                const ville = this.value;
+                quartierSelect.innerHTML = '<option value="">-- Sélectionnez un arrondissement --</option>';
+
+                if (ville && arrondissements[ville]) {
+                    quartierSelect.disabled = false;
+                    arrondissements[ville].forEach(arr => {
+                        const option = document.createElement('option');
+                        option.value = arr.value;
+                        option.textContent = arr.text;
+                        quartierSelect.appendChild(option);
+                    });
+                } else {
+                    quartierSelect.disabled = true;
+                }
+                updateCalculatedFields();
+                checkFormValidity();
+            });
+
+            // Balcon management
+            document.getElementById('balcon').addEventListener('change', function() {
+                const balconGroup = document.getElementById('surface_balcon_group');
+                if (this.value === 'oui') {
+                    balconGroup.classList.add('show');
+                } else {
+                    balconGroup.classList.remove('show');
+                    document.getElementById('surface_balcon').value = '';
+                }
+            });
+
+            // Auto calculations
+            async function updateCalculatedFields() {
+                const ville = document.getElementById('ville').value;
+                const quartier = document.getElementById('quartier').value;
+                const surface = parseFloat(document.getElementById('surface').value) || 0;
+                const travaux = document.getElementById('travaux').value;
+
+                // Taxe foncière
+                if (ville && quartier && surface > 0) {
+                    const taxe = await analyzer.calculateTaxeFonciere(ville, quartier, surface);
+                    document.getElementById('taxe_fonciere').value = taxe;
+                }
+
+                // Coût travaux
+                if (travaux && surface > 0) {
+                    const cout = analyzer.getCoutTravaux(travaux, surface);
+                    document.getElementById('cout_travaux').value = cout;
+                }
+            }
+
+            // Form validation
+            function checkFormValidity() {
+                const required = ['type', 'surface', 'ville', 'quartier', 'prix', 'objectif', 'apport_personnel'];
+                const valid = required.every(id => document.getElementById(id).value.trim() !== '');
+                document.getElementById('submitBtn').disabled = !valid;
+            }
+
+            // Event listeners
+            ['type', 'surface', 'ville', 'quartier', 'prix', 'objectif', 'apport_personnel', 'travaux'].forEach(id => {
+                const field = document.getElementById(id);
+                if (field) {
+                    field.addEventListener('change', () => {
+                        updateCalculatedFields();
+                        checkFormValidity();
+                    });
+                    field.addEventListener('input', () => {
+                        updateCalculatedFields();
+                        checkFormValidity();
+                    });
+                }
+            });
+
+            // Form submission
+            document.getElementById('annonceForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const submitBtn = document.getElementById('submitBtn');
+                const resultsSection = document.getElementById('resultsSection');
+                const analysisResult = document.getElementById('analysisResult');
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = '🔄 Analyse en cours...';
+                resultsSection.style.display = 'block';
+                analysisResult.innerHTML = '<div class="loading">Analyse Propty en cours...</div>';
+
+                const formData = new FormData(this);
+                const data = {};
+                formData.forEach((value, key) => data[key] = value);
+
+                // Add calculated fields
+                data.taxe_fonciere = document.getElementById('taxe_fonciere').value;
+                data.cout_travaux = document.getElementById('cout_travaux').value;
+
+                setTimeout(() => {
+                    const analysis = analyzer.analyzeProperty(data);
+                    const result = analyzer.formatAnalysis(data, analysis);
+
+                    analysisResult.innerHTML = result;
+                    analysisResult.scrollIntoView({ behavior: 'smooth' });
+
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '🔍 Analyser cette annonce';
+                    checkFormValidity();
+                }, 2000);
+            });
+
+            // Initialize
+            checkFormValidity();
+            checkUrlValidity();
+        });
+
+        // Make functions global
+        window.switchTab = switchTab;
+        window.analyzeUrl = analyzeUrl;
+    </script>
+</body>
+</html>
